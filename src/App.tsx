@@ -23,7 +23,7 @@ function App() {
   function handleEnter() {
     if (!input.current || !previousContent.current) return;
     const value = input.current.value;
-    addText(value);
+    ipcRenderer.send("command", value);
     input.current.value = "";
     // console.log(input.current.value);
   }
@@ -38,8 +38,21 @@ function App() {
 
   useEffect(() => {
     addEnterEventListener();
+
+    const removePrintMessageListener = ipcRenderer.on("commandResponse",(event,message)=>{
+      if(message === "clear"){
+        previousContent.current!.innerHTML = "";
+        return;
+      }
+      addText(message)
+    })
+      
+
+
     return () => {
       document.removeEventListener("keydown", handleEnter);
+      // remove the printMessage listener
+      // removePrintMessageListener();
     };
   }, [addText]);
 

@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { update } from './update'
+import { proccessInput } from './utils'
 
 // The built directory structure
 //
@@ -102,11 +103,6 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on("count", (event, arg) => {
-  console.log(arg);
-  console.log("count");
-});
-
 // New window example arg: new windows url
 ipcMain.handle('open-win', (_, arg) => {
   const childWindow = new BrowserWindow({
@@ -124,3 +120,19 @@ ipcMain.handle('open-win', (_, arg) => {
   }
 })
 
+// Funcion para enviar mensajes desde el main a la ventana
+// recibe un string y lo envia al renderer
+const sendResponse = (text) => {
+  win?.webContents.send('commandResponse', text)
+}
+
+// funcion que recibe el mensaje del renderer (comando a ejecutar)
+ipcMain.on('command', (_, arg) => {
+  let processedInput = proccessInput(arg)
+  if(processedInput === 'clear'){
+    sendResponse(arg)
+    return
+  }
+  let response = `${arg}\n${processedInput}`;
+  sendResponse(response)
+})
