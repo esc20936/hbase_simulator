@@ -10,14 +10,13 @@ console.log(
 );
 
 function App() {
-
   const previousContent = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
 
   const addText = (text: string) => {
     if (!previousContent.current) return;
     const p = document.createElement("p");
-    p.innerText = "HBase> "+ text;
+    p.innerText = "HBase> " + text;
     previousContent.current.appendChild(p);
   };
 
@@ -45,21 +44,22 @@ function App() {
   }, [addText]);
 
   return (
-    <div className="App relative h-full w-full bg-black overflow-y-scroll overflow-x-hidden">
-      <div className="center absolute left-1/2 "/>
-      <div className="PreviousOutput text-white" ref={previousContent}></div>
-      <div className="Current flex flex-row">
-        <span className="text-white">HBase {">"} </span>
-        <input
-          className="text-white bg-black
-          outline-none
-          border-none
-          w-3/4  
-
-          "
-          type="text"
-          ref={input}
-        />
+    <div className="App relative h-full w-full bg-black flex flex-col justify-center items-center">
+      <div className="center absolute left-1/2 " />
+      <div className="h-full w-full  rounded-lg overflow-y-scroll overflow-x-hidden ">
+        <div className="PreviousOutput text-white" ref={previousContent}></div>
+        <div className="Current flex flex-row">
+          <span className="text-white">HBase {">"} </span>
+          <input
+            className="text-white bg-transparent
+              outline-none
+              border-none
+              w-3/4  
+              "
+            type="text"
+            ref={input}
+          />
+        </div>
       </div>
     </div>
   );
