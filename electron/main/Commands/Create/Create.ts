@@ -15,7 +15,7 @@ export const create = (processedInput: string[]) => {
     }
     // check if the name is valid
     // is valid if it is not empty and it has to be in ' '
-    if (name[0] !== "'" || name[name.length - 1] !== "'") {
+    if (name[0] !== "'" || name[name.length - 1] !== "'") { 
         return "The name of the database has to be in ' '"
     }
     // remove the ' '
@@ -38,19 +38,16 @@ export const create = (processedInput: string[]) => {
     }
     // create the database
     if(processedInput.length > 2){
-        let columns = processedInput[2].split(",")
+        let columns = processedInput.slice(2)
         console.log(columns)
         if(!validColumns(columns)){
-            return "Invalid columns"
+            return "ERROR: The column names are not valid"
         }
         createDatabaseWithColumns(name,columns)
     }else{
 
         createDatabase(name)
     }
-
-
-
 
     return `Database ${name} created ${new Date().getTime()}`
 }
