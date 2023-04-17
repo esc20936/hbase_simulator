@@ -1,5 +1,5 @@
 import { databaseExists } from '../utils';
-import { addColumn, removeColumn } from '../utils';
+import { addColumn, removeColumn, is_enabled } from '../utils';
 
 export const alter = (commandInput: string[]) => {
     let databaseName = commandInput[1];
@@ -29,6 +29,12 @@ export const alter = (commandInput: string[]) => {
     if(!databaseExists(databaseName)){
         return "The database doesn't exists"
     }
+
+
+    if(!is_enabled(databaseName)){
+        return "The database is not enabled"
+    }
+
 
     let json = commandInput[2];
 

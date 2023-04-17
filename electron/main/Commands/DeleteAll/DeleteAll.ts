@@ -1,4 +1,4 @@
-import { databaseExists, deleteRowWithKey } from "../utils";
+import { databaseExists, deleteRowWithKey, is_enabled } from "../utils";
 
 export const deleteAll = (commandInput: string[]) => {
 
@@ -26,6 +26,10 @@ export const deleteAll = (commandInput: string[]) => {
 
     if(!databaseExists(tableName)){
         return "The table doesn't exists"
+    }
+
+    if(!is_enabled(tableName)){
+        return "The table is not enabled"
     }
 
     let rowkey = commandInput[2];

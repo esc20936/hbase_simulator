@@ -1,4 +1,4 @@
-import { databaseExists, getRow } from "../utils";
+import { databaseExists, getRow, is_enabled } from "../utils";
 export const get = (commandInput: string[]) => {
 
     if(commandInput.length !== 3){
@@ -26,6 +26,9 @@ export const get = (commandInput: string[]) => {
         return "The table doesn't exists"
     }
 
+    if(!is_enabled(tableName)){
+        return "The table is not enabled"
+    }
     let rowkey = commandInput[2];
 
     return getRow(tableName, rowkey)

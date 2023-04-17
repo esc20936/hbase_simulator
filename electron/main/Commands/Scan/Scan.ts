@@ -1,4 +1,4 @@
-import { databaseExists, scanDatabase } from "../utils";
+import { databaseExists, scanDatabase, is_enabled } from "../utils";
 
 export const scan = (commandInput: string[]) => {
 
@@ -25,6 +25,10 @@ export const scan = (commandInput: string[]) => {
 
     if(!databaseExists(tableName)){
         return "The table doesn't exists"
+    }
+
+    if(!is_enabled(tableName)){
+        return "The table is not enabled"
     }
 
     // let rowkey = commandInput[2];

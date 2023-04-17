@@ -239,13 +239,44 @@ export const getRow = (tableName:string,row:string ) => {
 }
 
 
+// create a function that receives a json object and returns recursively all the keys that has objects as values
+function getKeysWithObjects(obj: any, keys: string[] = []): string[] {
+    for (const key in obj) {
+        if (typeof obj[key] === 'object') {
+            keys.push(key);
+            getKeysWithObjects(obj[key], keys);
+        }
+    }
+    return keys;
+}
+
+// delete duplicates values in an array
+function removeDuplicates(arr: string[]) {
+    let unique_array = arr.filter(function (elem, index, self) {
+        return index === self.indexOf(elem);
+    });
+    return unique_array
+}
+
+// delete values that can be converted to numbers
+function removeNumbers(arr: string[]) {
+    let unique_array = arr.filter(function (elem, index, self) {
+        return isNaN(Number(elem));
+    });
+    return unique_array
+}
 
 // get the columns of a database
 export const getColumns = (name: string) => {
     // get the columns of the database
     let databasePath = path.join(__dirname, "..", "..", "..", "databases", name+".json");
     let database = JSON.parse(fs.readFileSync(databasePath, "utf8"));
-    return database.columns;
+    // traverse all the database
+    // if key has a value of object, then it is a column family
+    let res = getKeysWithObjects(database.rows);
+    let withoutDuplicates = removeDuplicates(res);
+    let withoutNumbers = removeNumbers(withoutDuplicates);
+    return withoutNumbers;
 }
 
 
@@ -368,4 +399,11 @@ export const deleteCellWithTimestamp = (name: string, key: string, columnFamily:
     // save the database
     fs.writeFileSync(databasePath, JSON.stringify(database));
     return `Cell ${key} deleted from database ${name}`;
+}
+
+export const is_enabled = (tableName: string) =>{
+    
+    let databasePath = path.join(__dirname, "..", "..", "..", "databases", tableName+".json");
+    let database = JSON.parse(fs.readFileSync(databasePath, "utf8"));
+    return database.ENABLED
 }

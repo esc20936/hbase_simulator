@@ -1,4 +1,4 @@
-import { databaseExists, deleteCellWithTimestamp } from "../utils";
+import { databaseExists, deleteCellWithTimestamp, is_enabled } from "../utils";
 
 export const deleteR = (commandInput: string[]) => {
 
@@ -25,6 +25,10 @@ export const deleteR = (commandInput: string[]) => {
 
     if(!databaseExists(tableName)){
         return "The table doesn't exists"
+    }
+
+    if(!is_enabled(tableName)){
+        return "The table is not enabled"
     }
 
     let rowkey = commandInput[2];
